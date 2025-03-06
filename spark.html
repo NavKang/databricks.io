@@ -5,7 +5,6 @@
     <style>
         body { font-family: Arial, sans-serif; }
         pre { background-color: #f4f4f4; padding: 10px; border-left: 4px solid #333; overflow-x: auto; }
-        hr { margin: 20px 0; border: none; border-top: 2px solid #333; }
     </style>
 </head>
 <body>
@@ -74,8 +73,6 @@ delta_table.delete(col("id") == 2)
 spark.sql("OPTIMIZE sales ZORDER BY order_date")
     </pre>
     
-    <hr>
-    
     <h1>Beginner and Intermediate PySpark DataFrame Examples</h1>
     
     <h2>Creating a Simple DataFrame</h2>
@@ -89,4 +86,77 @@ df.show()
     <h2>Creating a DataFrame from JSON</h2>
     <pre>
 data = [{"Name": "Alice", "Age": 25}, {"Name": "Bob", "Age": 30}]
-df = spark.read.json(spark.spark
+df = spark.read.json(spark.sparkContext.parallelize(data))
+df.show()
+    </pre>
+    
+    <h2>Selecting Specific Columns</h2>
+    <pre>
+df.select("Name").show()
+    </pre>
+    
+    <h2>Filtering Data</h2>
+    <pre>
+df.filter(df.Age > 28).show()
+    </pre>
+    
+    <h2>Adding a New Column</h2>
+    <pre>
+df = df.withColumn("Salary", df.Age * 1000)
+df.show()
+    </pre>
+    
+    <h2>Sorting Data</h2>
+    <pre>
+df.orderBy(df.Age.desc()).show()
+    </pre>
+    
+    <h2>Counting Rows</h2>
+    <pre>
+df.count()
+    </pre>
+    
+    <h2>Aggregations (Find Average Age)</h2>
+    <pre>
+from pyspark.sql.functions import avg
+df.select(avg("Age")).show()
+    </pre>
+    
+    <h2>Grouping Data</h2>
+    <pre>
+df.groupBy("Age").count().show()
+    </pre>
+    
+    <h2>Saving DataFrame as a Table (Delta Table)</h2>
+    <pre>
+df.write.format("delta").mode("overwrite").saveAsTable("people_table")
+    </pre>
+    
+    <h2>Reading a Delta Table</h2>
+    <pre>
+df_delta = spark.read.table("people_table")
+df_delta.show()
+    </pre>
+    
+    <h2>Updating a Delta Table</h2>
+    <pre>
+delta_table = DeltaTable.forName(spark, "people_table")
+delta_table.update(
+    condition="Name = 'Alice'",
+    set={"Age": "Age + 1"}
+)
+    </pre>
+    
+    <h2>Deleting Data from a Delta Table</h2>
+    <pre>
+delta_table.delete("Age < 30")
+    </pre>
+    
+    <h2>Time Travel (View Old Data Version)</h2>
+    <pre>
+df_old = spark.read.format("delta").option("versionAsOf", 0).table("people_table")
+df_old.show()
+    </pre>
+</body>
+</html>
+
