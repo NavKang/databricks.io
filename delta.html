@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Databricks Delta Tables - Advanced</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        code { font-family: monospace; }
+        h1, h2, h3 { color: #333; }
+        .container { max-width: 900px; margin: auto; }
+        .toc { background: #eee; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Databricks Delta Tables - Advanced</h1>
+        
+        <h2 id="create-delta">Creating Delta Tables</h2>
+        <pre><code>-- Create a Delta Table with Partitioning
+CREATE TABLE sales (
+    order_id INT,
+    customer STRING,
+    amount DOUBLE,
+    order_date DATE
+) USING DELTA
+PARTITIONED BY (order_date);</code></pre>
+
+        <h2 id="merge-upsert">Upserting Data (MERGE INTO)</h2>
+        <pre><code>-- Upsert data into a Delta Table
+MERGE INTO sales AS target
+USING (SELECT 1 AS order_id, 'Alice' AS customer, 200.75 AS amount, '2024-01-01' AS order_date) AS source
+ON target.order_id = source.order_id
+WHEN MATCHED THEN UPDATE SET amount = source.amount
+WHEN NOT MATCHED THEN INSERT *;</code></pre>
+
+        <h2 id="table-history">Table History & Time Travel</h2>
+        <pre><code>-- View all changes made to a Delta table
+DESCRIBE HISTORY sales;</code></pre>
+
+        <h2 id="restore-table">Restoring Tables</h2>
+        <pre><code>-- Restore table to a previous version
+RESTORE TABLE sales TO VERSION AS OF 2;</code></pre>
+
+        <h2 id="delete-rows">Deleting Data</h2>
+        <pre><code>-- Delete records from a Delta table
+DELETE FROM sales WHERE order_date < '2024-01-01';</code></pre>
+
+        <h2 id="optimize">Optimizing Delta Tables</h2>
+        <pre><code>-- Optimize a Delta table to compact small files
+OPTIMIZE sales;</code></pre>
+
+        <h2 id="zorder">Z-Order Indexing</h2>
+        <pre><code>-- Optimize with Z-Order to improve query performance
+OPTIMIZE sales ZORDER BY (order_date);</code></pre>
+
+        <h2 id="vacuum">Vacuum - Removing Old Data</h2>
+        <pre><code>-- Remove old versions of data to save storage space
+VACUUM sales RETAIN 7 HOURS;</code></pre>
+    </div>
+</body>
+</html>
