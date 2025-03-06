@@ -10,9 +10,21 @@
         .container { max-width: 800px; margin: auto; padding: 20px; }
         h1 { color: #333; }
         a { display: block; margin: 10px 0; color: #007bff; text-decoration: none; }
+
+        /* CSS to position the logo in the top-left corner */
+        #db_logo {
+            position: absolute; /* Positions the logo absolutely within the page */
+            top: 10px;          /* Adds a small margin from the top */
+            left: 10px;         /* Adds a small margin from the left */
+            width: 100px;       /* Set the width of the logo (adjust as needed) */
+            height: auto;       /* Maintains the aspect ratio of the image */
+        }
     </style>
 </head>
 <body>
+    <!-- Image element with the ID "db_logo" -->
+    <img id="db_logo" src="path_to_your_logo_image.png" alt="DB Logo">
+
     <div class="container">
         <h1>Nav's Code for Databricks</h1>
         <p>Select a topic below:</p>
