@@ -18,7 +18,6 @@ from pyspark.sql import SparkSession
 # Create Spark session
 spark = SparkSession.builder.appName("Databricks PySpark Guide").getOrCreate()
     </pre>
-    <hr>
     
     <h2>Creating DataFrames</h2>
     <pre>
@@ -29,7 +28,6 @@ data = [Row(id=1, name='Alice', amount=100.50), Row(id=2, name='Bob', amount=200
 df = spark.createDataFrame(data)
 df.show()
     </pre>
-    <hr>
     
     <h2>Reading Delta Tables</h2>
     <pre>
@@ -37,7 +35,6 @@ df.show()
 df = spark.read.format("delta").table("sales")
 df.show()
     </pre>
-    <hr>
     
     <h2>Transforming DataFrames</h2>
     <pre>
@@ -47,14 +44,12 @@ from pyspark.sql.functions import col
 df_filtered = df.filter(col("amount") > 100).select("name", "amount")
 df_filtered.show()
     </pre>
-    <hr>
     
     <h2>Writing DataFrames to Delta Tables</h2>
     <pre>
 # Write a DataFrame to a Delta table
 df.write.format("delta").mode("append").saveAsTable("sales")
     </pre>
-    <hr>
     
     <h2>Updating Delta Tables</h2>
     <pre>
@@ -66,23 +61,22 @@ delta_table.update(
     set={"amount": col("amount") * 1.1}  # Increase amount by 10%
 )
     </pre>
-    <hr>
     
     <h2>Deleting Data from Delta Tables</h2>
     <pre>
 # Delete records from Delta table
 delta_table.delete(col("id") == 2)
     </pre>
-    <hr>
     
     <h2>Optimizing Delta Tables</h2>
     <pre>
 # Optimize Delta table to improve query performance
 spark.sql("OPTIMIZE sales ZORDER BY order_date")
     </pre>
+    
     <hr>
     
-    <h1>Beginner PySpark DataFrame Examples</h1>
+    <h1>Beginner and Intermediate PySpark DataFrame Examples</h1>
     
     <h2>Creating a Simple DataFrame</h2>
     <pre>
@@ -91,98 +85,8 @@ columns = ["Name", "Age"]
 df = spark.createDataFrame(data, columns)
 df.show()
     </pre>
-    <hr>
     
     <h2>Creating a DataFrame from JSON</h2>
     <pre>
 data = [{"Name": "Alice", "Age": 25}, {"Name": "Bob", "Age": 30}]
-df = spark.read.json(spark.sparkContext.parallelize(data))
-df.show()
-    </pre>
-    <hr>
-    
-    <h2>Selecting Specific Columns</h2>
-    <pre>
-df.select("Name").show()
-    </pre>
-    <hr>
-    
-    <h2>Filtering Data</h2>
-    <pre>
-df.filter(df.Age > 28).show()
-    </pre>
-    <hr>
-    
-    <h2>Adding a New Column</h2>
-    <pre>
-df = df.withColumn("Salary", df.Age * 1000)
-df.show()
-    </pre>
-    <hr>
-    
-    <h2>Sorting Data</h2>
-    <pre>
-df.orderBy(df.Age.desc()).show()
-    </pre>
-    <hr>
-    
-    <h2>Counting Rows</h2>
-    <pre>
-df.count()
-    </pre>
-    <hr>
-    
-    <h2>Aggregations (Find Average Age)</h2>
-    <pre>
-from pyspark.sql.functions import avg
-df.select(avg("Age")).show()
-    </pre>
-    <hr>
-    
-    <h2>Grouping Data</h2>
-    <pre>
-df.groupBy("Age").count().show()
-    </pre>
-    <hr>
-    
-    <h2>Saving DataFrame as a Table (Delta Table)</h2>
-    <pre>
-df.write.format("delta").mode("overwrite").saveAsTable("people_table")
-    </pre>
-    <hr>
-    
-    <h1>Intermediate PySpark DataFrame Examples</h1>
-    
-    <h2>Reading a Delta Table</h2>
-    <pre>
-df_delta = spark.read.table("people_table")
-df_delta.show()
-    </pre>
-    <hr>
-    
-    <h2>Updating a Delta Table</h2>
-    <pre>
-from delta.tables import DeltaTable
-
-delta_table = DeltaTable.forName(spark, "people_table")
-delta_table.update(
-    condition="Name = 'Alice'",
-    set={"Age": "Age + 1"}
-)
-    </pre>
-    <hr>
-    
-    <h2>Deleting Data from a Delta Table</h2>
-    <pre>
-delta_table.delete("Age < 30")
-    </pre>
-    <hr>
-    
-    <h2>Time Travel (View Old Data Version)</h2>
-    <pre>
-df_old = spark.read.format("delta").option("versionAsOf", 0).table("people_table")
-df_old.show()
-    </pre>
-    <hr>
-</body>
-</html>
+df = spark.read.json(spark.spark
