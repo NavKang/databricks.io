@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Databricks SQL Basics</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        code { font-family: monospace; }
+        h1, h2, h3 { color: #333; }
+        .container { max-width: 900px; margin: auto; }
+        .toc { background: #eee; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Databricks SQL Basics</h1>
+        
+      <h2 id="create-db">Creating & Using Databases</h2>
+        <pre><code>-- Create a database if it does not exist
+CREATE DATABASE IF NOT EXISTS my_database;
+USE my_database;</code></pre>
 
+        <h2 id="create-table">Creating Tables</h2>
+        <pre><code>-- Create a managed Delta table
+CREATE TABLE sales (
+    order_id INT,
+    customer STRING,
+    amount DOUBLE,
+    order_date DATE
+) USING DELTA;</code></pre>
+
+        <h2 id="insert-data">Inserting Data</h2>
+        <pre><code>-- Insert data into the table
+INSERT INTO sales VALUES (1, 'Alice', 100.50, '2024-01-01');
+INSERT INTO sales VALUES (2, 'Bob', 200.75, '2024-01-02');</code></pre>
+
+        <h2 id="query-data">Querying Data</h2>
+        <pre><code>-- Retrieve all records
+SELECT * FROM sales;
+
+-- Filtered query
+SELECT * FROM sales WHERE amount > 100;</code></pre>
+
+        <h2 id="update-delete">Updating & Deleting Data</h2>
+        <pre><code>-- Update a record
+UPDATE sales SET amount = 250 WHERE order_id = 1;
+
+-- Delete a record
+DELETE FROM sales WHERE order_id = 2;</code></pre>
+
+        <h2 id="describe-table">Exploring Table Data</h2>
+        <pre><code>-- Describe table schema
+DESCRIBE TABLE sales;
+
+-- Show detailed table info
+DESCRIBE DETAIL sales;</code></pre>
+    </div>
+</body>
+</html>
