@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETL Pipelines in Databricks</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        code { font-family: monospace; }
+        h1, h2, h3 { color: #333; }
+        .container { max-width: 900px; margin: auto; }
+        .toc { background: #eee; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ETL Pipelines in Databricks</h1>
+    
+        <h2 id="extract">Extracting Data</h2>
+        <pre><code>from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("ETL Pipeline").getOrCreate()
+
+# Read CSV file from DBFS
+df = spark.read.csv("dbfs:/mnt/raw_data/sales.csv", header=True, inferSchema=True)
+df.show()</code></pre>
+
+        <h2 id="transform">Transforming Data</h2>
+        <pre><code>from pyspark.sql.functions import col
+
+# Apply transformations
+df_transformed = df.withColumn("amount", col("amount") * 1.1)
+df_transformed.show()</code></pre>
+
+        <h2 id="load">Loading Data into Delta Tables</h2>
+        <pre><code># Write transformed data into a Delta table
+df_transformed.write.format("delta").mode("overwrite").saveAsTable("sales_processed")</code></pre>
+
+        <h2 id="schedule">Scheduling Databricks Jobs</h2>
+        <pre><code># Automate the ETL pipeline using Databricks Jobs
+# UI -> Workflows -> Create Job -> Add Notebook Task
+</code></pre>
+
+        <h2 id="monitor">Monitoring & Debugging Pipelines</h2>
+        <pre><code># Check logs and job execution status
+# UI -> Workflows -> Job Runs -> Logs
+</code></pre>
+    </div>
+</body>
+</html>
