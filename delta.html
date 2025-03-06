@@ -53,10 +53,32 @@ OPTIMIZE sales;</code></pre>
 
         <h2 id="zorder">Z-Order Indexing</h2>
         <pre><code>-- Optimize with Z-Order to improve query performance
-OPTIMIZE sales ZORDER BY (order_date);</code></pre>
+OPTIMIZE sales ZORDER BY (customer);</code></pre>
+
+        <h2 id="partitioning">Partitioning Data</h2>
+        <pre><code>-- Create a partitioned Delta table
+CREATE TABLE sales (
+    order_id INT,
+    customer STRING,
+    amount DOUBLE,
+    order_date DATE
+) USING DELTA
+PARTITIONED BY (order_date);</code></pre>
+
+        <h2 id="caching">Caching & Persisting Data</h2>
+        <pre><code># Cache DataFrame for repeated use
+df.cache()
+df.count()  # Triggers cache</code></pre>
+
+        <h2 id="broadcast">Broadcast Joins</h2>
+        <pre><code>from pyspark.sql.functions import broadcast
+
+# Optimize join performance with broadcast
+small_df = spark.read.format("delta").load("dbfs:/mnt/delta/small_table")
+df_joined = df.join(broadcast(small_df), "order_id")</code></pre>
 
         <h2 id="vacuum">Vacuum - Removing Old Data</h2>
-        <pre><code>-- Remove old versions of data to save storage space
+        <pre><code>-- Remove old versions of data
 VACUUM sales RETAIN 7 HOURS;</code></pre>
     </div>
 </body>
