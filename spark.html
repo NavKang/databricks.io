@@ -73,7 +73,7 @@ delta_table.delete(col("id") == 2)
 spark.sql("OPTIMIZE sales ZORDER BY order_date")
     </pre>
     
-    <h1>Beginner and Intermediate PySpark DataFrame Examples</h1>
+    <h1>Beginner PySpark DataFrame Examples</h1>
     
     <h2>Creating a Simple DataFrame</h2>
     <pre>
@@ -131,6 +131,8 @@ df.groupBy("Age").count().show()
     <pre>
 df.write.format("delta").mode("overwrite").saveAsTable("people_table")
     </pre>
+    
+    <h1>Intermediate PySpark DataFrame Examples</h1>
     
     <h2>Reading a Delta Table</h2>
     <pre>
