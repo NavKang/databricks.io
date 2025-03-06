@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming in Databricks</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        code { font-family: monospace; }
+        h1, h2, h3 { color: #333; }
+        .container { max-width: 900px; margin: auto; }
+        .toc { background: #eee; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Streaming in Databricks</h1>
+        
+        <h2 id="read-stream">Reading Streaming Data</h2>
+        <pre><code>from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("Databricks Streaming").getOrCreate()
+
+# Read streaming data from a Delta table
+df_stream = spark.readStream.format("delta").table("sales_streaming")
+df_stream.printSchema()</code></pre>
+
+        <h2 id="write-stream">Writing Streaming Data</h2>
+        <pre><code># Write streaming data to a Delta table
+df_stream.writeStream.format("delta")\
+    .option("checkpointLocation", "dbfs:/mnt/checkpoints/")\
+    .start("dbfs:/mnt/delta/sales_streaming")</code></pre>
+
+        <h2 id="agg-stream">Streaming Aggregations</h2>
+        <pre><code>from pyspark.sql.functions import sum
+
+# Perform real-time aggregation
+df_agg = df_stream.groupBy("customer").agg(sum("amount").alias("total_amount"))
+df_agg.writeStream.outputMode("complete").format("console").start()</code></pre>
+
+        <h2 id="checkpointing">Checkpointing & Fault Tolerance</h2>
+        <pre><code># Ensure fault tolerance using checkpointing
+df_stream.writeStream.format("delta")\
+    .option("checkpointLocation", "dbfs:/mnt/checkpoints/")\
+    .start("dbfs:/mnt/delta/sales_streaming")</code></pre>
+
+        <h2 id="monitor">Monitoring Streaming Jobs</h2>
+        <pre><code># Check active streaming queries
+for query in spark.streams.active:
+    print(f"Streaming Query: {query.name} - Status: {query.status}")</code></pre>
+    </div>
+</body>
+</html>
