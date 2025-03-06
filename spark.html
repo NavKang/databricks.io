@@ -1,69 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PySpark Basics - Databricks</title>
+    <title>PySpark DataFrame Examples</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
-        code { font-family: monospace; }
-        h1, h2, h3 { color: #333; }
-        .container { max-width: 900px; margin: auto; }
-        .toc { background: #eee; padding: 15px; border-radius: 5px; }
+        body { font-family: Arial, sans-serif; }
+        pre { background-color: #f4f4f4; padding: 10px; border-left: 4px solid #333; overflow-x: auto; }
+        hr { margin: 20px 0; border: none; border-top: 2px solid #333; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>PySpark Basics - Databricks</h1>
-  
-        <h2 id="spark-session">Creating a Spark Session</h2>
-        <pre><code>from pyspark.sql import SparkSession
+    <h1>PySpark Basics - Databricks</h1>
+    
+    <h2>Creating a Spark Session</h2>
+    <pre>
+from pyspark.sql import SparkSession
 
 # Create Spark session
-spark = SparkSession.builder.appName("Databricks PySpark Guide").getOrCreate()</code></pre>
-
-        <h2 id="create-df">Creating DataFrames</h2>
-        <pre><code>from pyspark.sql import Row
+spark = SparkSession.builder.appName("Databricks PySpark Guide").getOrCreate()
+    </pre>
+    <hr>
+    
+    <h2>Creating DataFrames</h2>
+    <pre>
+from pyspark.sql import Row
 
 # Creating a DataFrame manually
 data = [Row(id=1, name='Alice', amount=100.50), Row(id=2, name='Bob', amount=200.75)]
 df = spark.createDataFrame(data)
-df.show()</code></pre>
-
-        <h2 id="read-delta">Reading Delta Tables</h2>
-        <pre><code># Read a Delta table into a DataFrame
+df.show()
+    </pre>
+    <hr>
+    
+    <h2>Reading Delta Tables</h2>
+    <pre>
+# Read a Delta table into a DataFrame
 df = spark.read.format("delta").table("sales")
-df.show()</code></pre>
-
-        <h2 id="df-transform">Transforming DataFrames</h2>
-        <pre><code>from pyspark.sql.functions import col
+df.show()
+    </pre>
+    <hr>
+    
+    <h2>Transforming DataFrames</h2>
+    <pre>
+from pyspark.sql.functions import col
 
 # Filter and select specific columns
 df_filtered = df.filter(col("amount") > 100).select("name", "amount")
-df_filtered.show()</code></pre>
-
-        <h2 id="write-delta">Writing DataFrames to Delta Tables</h2>
-        <pre><code># Write a DataFrame to a Delta table
-df.write.format("delta").mode("append").saveAsTable("sales")</code></pre>
-
-        <h2 id="update-delta">Updating Delta Tables</h2>
-        <pre><code>from delta.tables import DeltaTable
+df_filtered.show()
+    </pre>
+    <hr>
+    
+    <h2>Writing DataFrames to Delta Tables</h2>
+    <pre>
+# Write a DataFrame to a Delta table
+df.write.format("delta").mode("append").saveAsTable("sales")
+    </pre>
+    <hr>
+    
+    <h2>Updating Delta Tables</h2>
+    <pre>
+from delta.tables import DeltaTable
 
 delta_table = DeltaTable.forName(spark, "sales")
 delta_table.update(
     condition=col("id") == 1,
     set={"amount": col("amount") * 1.1}  # Increase amount by 10%
-)</code></pre>
+)
+    </pre>
+    <hr>
+    
+    <h2>Deleting Data from Delta Tables</h2>
+    <pre>
+# Delete records from Delta table
+delta_table.delete(col("id") == 2)
+    </pre>
+    <hr>
+    
+    <h2>Optimizing Delta Tables</h2>
+    <pre>
+# Optimize Delta table to improve query performance
+spark.sql("OPTIMIZE sales ZORDER BY order_date")
+    </pre>
+    <hr>
+    
+    <h1>Beginner PySpark DataFrame Examples</h1>
+    
+    <h2>Creating a Simple DataFrame</h2>
+    <pre>
+data = [("Alice", 25), ("Bob", 30), ("Charlie", 35)]
+columns = ["Name", "Age"]
+df = spark.createDataFrame(data, columns)
+df.show()
+    </pre>
+    <hr>
+    
+    <h2>Creating a DataFrame from JSON</h2>
+    <pre>
+data = [{"Name": "Alice", "Age": 25}, {"Name": "Bob", "Age": 30}]
+df = spark.read.json(spark.sparkContext.parallelize(data))
+df.show()
+    </pre>
+    <hr>
+    
+    <h2>Selecting Specific Columns</h2>
+    <pre>
+df.select("Name").show()
+    </pre>
+    <hr>
+    
+    <h2>Filtering Data</h2>
+    <pre>
+df.filter(df.Age > 28).show()
+    </pre>
+    <hr>
+    
+    <h2>Adding a New Column</h2>
+    <pre>
+df = df.withColumn("Salary", df.Age * 1000)
+df.show()
+    </pre>
+    <hr>
+    
+    <h2>Sorting Data</h2>
+    <pre>
+df.orderBy(df.Age.desc()).show()
+    </pre>
+    <hr>
+    
+    <h2>Counting Rows</h2>
+    <pre>
+df.count()
+    </pre>
+    <hr>
+    
+    <h2>Aggregations (Find Average Age)</h2>
+    <pre>
+from pyspark.sql.functions import avg
+df.select(avg("Age")).show()
+    </pre>
+    <hr>
+    
+    <h2>Grouping Data</h2>
+    <pre>
+df.groupBy("Age").count().show()
+    </pre>
+    <hr>
+    
+    <h2>Saving DataFrame as a Table (Delta Table)</h2>
+    <pre>
+df.write.format("delta").mode("overwrite").saveAsTable("people_table")
+    </pre>
+    <hr>
+    
+    <h1>Intermediate PySpark DataFrame Examples</h1>
+    
+    <h2>Reading a Delta Table</h2>
+    <pre>
+df_delta = spark.read.table("people_table")
+df_delta.show()
+    </pre>
+    <hr>
+    
+    <h2>Updating a Delta Table</h2>
+    <pre>
+from delta.tables import DeltaTable
 
-        <h2 id="delete-delta">Deleting Data from Delta Tables</h2>
-        <pre><code># Delete records from Delta table
-delta_table.delete(col("id") == 2)</code></pre>
-
-        <h2 id="optimize-delta">Optimizing Delta Tables</h2>
-        <pre><code># Optimize Delta table to improve query performance
-spark.sql("OPTIMIZE sales ZORDER BY order_date")</code></pre>
-    </div>
+delta_table = DeltaTable.forName(spark, "people_table")
+delta_table.update(
+    condition="Name = 'Alice'",
+    set={"Age": "Age + 1"}
+)
+    </pre>
+    <hr>
+    
+    <h2>Deleting Data from a Delta Table</h2>
+    <pre>
+delta_table.delete("Age < 30")
+    </pre>
+    <hr>
+    
+    <h2>Time Travel (View Old Data Version)</h2>
+    <pre>
+df_old = spark.read.format("delta").option("versionAsOf", 0).table("people_table")
+df_old.show()
+    </pre>
+    <hr>
 </body>
 </html>
-
