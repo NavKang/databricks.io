@@ -34,6 +34,9 @@
             margin-bottom: 15px;
             font-size: 18px;
             text-align: center;
+            color: #FD5C1B; /* Databricks orange-red color */
+            padding: 5px;
+            border-bottom: 2px solid #FD5C1B;
         }
         .option {
             margin-bottom: 10px;
@@ -46,6 +49,16 @@
         }
         .option:hover {
             background-color: #e0e0e0;
+        }
+        .option a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .option:hover a {
+            color: #000;
         }
     </style>
 </head>
@@ -62,25 +75,25 @@
         <!-- Column 1 -->
         <div class="column">
             <div class="column-title">Core Spark</div>
-            <div class="option">Spark</div>
-            <div class="option">SQL in PySpark</div>
-            <div class="option">SQL Templates - Detailed</div>
+            <div class="option"><a href="spark.html">Spark</a></div>
+            <div class="option"><a href="sqlspark.html">SQL in PySpark</a></div>
+            <div class="option"><a href="sqltemp.html">SQL Templates - Detailed</a></div>
         </div>
         
         <!-- Column 2 -->
         <div class="column">
             <div class="column-title">Databricks Tools</div>
-            <div class="option">Databricks dbutils</div>
-            <div class="option">DBFS</div>
-            <div class="option">DBKS Streaming</div>
+            <div class="option"><a href="dbutils.html">Databricks dbutils</a></div>
+            <div class="option"><a href="dbfs.html">DBFS</a></div>
+            <div class="option"><a href="streaming.html">DBKS Streaming</a></div>
         </div>
         
         <!-- Column 3 -->
         <div class="column">
             <div class="column-title">Data Management</div>
-            <div class="option">Delta Tables</div>
-            <div class="option">ETL</div>
-            <div class="option">Azure Storage Connecting</div>
+            <div class="option"><a href="delta.html">Delta Tables</a></div>
+            <div class="option"><a href="etl.html">ETL</a></div>
+            <div class="option"><a href="azure.html">Azure Storage Connecting</a></div>
         </div>
     </div>
 </body>
